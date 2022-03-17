@@ -1,27 +1,17 @@
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI('ff212de09e674ec29fad305dcbf86b61');
+const reqOptions = { 'mode': 'cors', headers: { 'Access-Control-Allow-Origin': '*' } };
 
-require('dotenv').config()
-const puppeteer = require('puppeteer');
-
-
- const serachInJBLitoral = async () => {
-    const browser = await puppeteer.launch({
-        headless:false,
-        slowMo:20,
-    });
-
-    const page = await browser.newPage();
-
-    page.setDefaultNavigationTimeout(1000000);
-
-    await page.setViewport({width: 1000, height:600});
-
-    await page.goto('https://jblitoral.com.br/');
-
-    await page.waitForNavigation();
-    await page.goto('https://jblitoral.com.br/');
-    const context = browser.defaultBrowserContext();
-       
-    //await browser.close();
+async function getNoticeBBCnews(){ 
+    return await newsapi.v2.topHeadlines({
+        source:'bbc-news',
+        language: 'pt',
+        sortBy:'relevancy',
+        reqOptions,
+    })
 }
 
-module.exports = serachInJBLitoral;
+module.exports = getNoticeBBCnews();
+
+
+

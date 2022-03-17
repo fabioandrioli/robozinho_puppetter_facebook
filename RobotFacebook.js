@@ -2,7 +2,34 @@ require('dotenv').config()
 const puppeteer = require('puppeteer');
 
 
- const loginAndPostTimeLine = async () => {
+const writeOnTimeline = async (page,notice) => {
+
+    let sentenceList = `Se você estiver lendo este conteudo, saiba que sou um processo,
+     automatizado de conteudo, fui desenvolvido por Fábio Gilberto.` +
+        "\n\n" +
+        notice.title + 
+        "\n\n" + 
+        notice.urlToImage + 
+        "\n\n" + 
+        notice.description + 
+        "\n\n" + 
+        `Author: ${notice.author || 'desconhecido'}` +
+        "\n\n" + 
+        notice.url +
+        "\n\n";
+
+    await page.keyboard.type(sentenceList);
+    await page.keyboard.down('Control');
+    await page.keyboard.press(String.fromCharCode(13)); // character code for enter is 13
+    await page.keyboard.up('Control');
+        
+    console.log('done');
+    await page.click(`[aria-label="No que você está pensando?"]`);
+}
+
+ const loginAndPostTimeLine = async (notice) => {
+
+   console.log(notice)
     const browser = await puppeteer.launch({
         headless:false,
         slowMo:20,
@@ -35,25 +62,9 @@ const puppeteer = require('puppeteer');
 
     await page.waitForSelector(`[aria-label="No que você está pensando?"]`);
     await page.click(`[aria-label="No que você está pensando?"]`);
-    let sentenceList = [
-        `Eu amo minha esposa Larissa Soriani`,
-    ];
-
-    for (let j = 0; j < sentenceList.length; j++) {
-        let sentence = sentenceList[j];
-        for (let i = 0; i < sentence.length; i++) {
-            await page.keyboard.press(sentence[i]);
-            if (i === sentence.length - 1) {
-                await page.keyboard.down('Control');
-                await page.keyboard.press(String.fromCharCode(13)); // character code for enter is 13
-                await page.keyboard.up('Control');
-        
-
-                console.log('done');
-                await page.click(`[aria-label="No que você está pensando?"]`);
-            }
-        }
-    }
+    await page.waitForSelector(`[aria-label="No que você está pensando?"]`);
+ 
+    await writeOnTimeline(page,notice)
   
     await browser.close();
 }

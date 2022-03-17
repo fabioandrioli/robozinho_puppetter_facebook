@@ -1,0 +1,132 @@
+const axios = require('axios');
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI('ff212de09e674ec29fad305dcbf86b61');
+// To query /v2/top-headlines
+// All options passed to topHeadlines are optional, but you need to include at least one of them
+const reqOptions = { 'mode': 'cors', headers: { 'Access-Control-Allow-Origin': '*' } };
+newsapi.v2.topHeadlines({
+  source:'bbc-news',
+  language: 'pt',
+  reqOptions,
+}).then(response => {
+  console.log("\n\n"+response.articles[0].title+"\n\n");
+  console.log(response.articles[0].description);
+});
+// To query /v2/everything
+// You must include at least one q, source, or domain
+// const news = newsapi.v2.everything({
+//   q: 'bitcoin',
+//   language: 'pt',
+//   sortBy:'relevancy',
+//   reqOptions
+// }).then(response => {
+//   console.log(response);
+//   /*
+//     {
+//       status: "ok",
+//       articles: [...]
+//     }
+//   */
+// });
+
+// newsapi.v2.sources({
+ 
+//   language: 'pt',
+//   country: 'br'
+// }).then(response => {
+//   console.log(response);
+//   /*
+//     {
+//       status: "ok",
+//       sources: [...]
+//     }
+//   */
+// });
+
+//axios.get('https://newsapi.org/v2/top-headlines?sources=bbc-news&language=pt&apiKey=ff212de09e674ec29fad305dcbf86b61').then(response => console.log(response));
+
+
+
+
+
+
+
+require('dotenv').config()
+const puppeteer = require('puppeteer');
+
+
+const writeOnTimeline = async (page,notice) => {
+
+    let sentenceList = [
+        "\n\n" +
+        notice.title + 
+        "\n\n" + 
+        notice.urlToImage + 
+        "\n\n" + 
+        notice.description + 
+        "\n\n" + 
+        `Author: ${notice.author || 'desconhecido'}` +
+        "\n\n" + 
+        notice.url,
+        "\n\n",
+    ];
+
+    for (let j = 0; j < sentenceList.length; j++) {
+        let sentence = sentenceList[j];
+
+            await page.keyboard.press(sentence[i]);
+            if (i === sentence.length - 1) {
+                await page.keyboard.down('Control');
+                await page.keyboard.press(String.fromCharCode(13)); // character code for enter is 13
+                await page.keyboard.up('Control');
+        
+
+                console.log('done');
+                await page.click(`[aria-label="No que você está pensando?"]`);
+            }
+        }
+    }
+}
+
+ const loginAndPostTimeLine = async (notice) => {
+
+   console.log(notice)
+    const browser = await puppeteer.launch({
+        headless:false,
+        slowMo:20,
+    });
+
+    const page = await browser.newPage();
+
+    page.setDefaultNavigationTimeout(1000000);
+
+    await page.setViewport({width: 1000, height:600});
+
+    await page.goto('https://facebook.com');
+   
+
+    await page.waitForSelector("#email");
+
+    await page.type("#email",process.env.FACEBOOK_EMAIL);
+    await page.type("#pass",process.env.FACEBOOK_PASSWORD);
+
+    await page.click(`[type="submit"]`)
+    
+    
+    await page.waitForNavigation();
+    await page.goto('https://www.facebook.com/fabio.gilberto.1');
+    const context = browser.defaultBrowserContext();
+    
+    await context.overridePermissions("https://www.facebook.com/fabio.gilberto.1", ["notifications"]);
+    await page.waitForSelector(`div.k4urcfbm.buofh1pr.j83agx80.ll8tlv6m`);
+    await page.click(`div.k4urcfbm.buofh1pr.j83agx80.ll8tlv6m`);
+
+    await page.waitForSelector(`[aria-label="No que você está pensando?"]`);
+    await page.click(`[aria-label="No que você está pensando?"]`);
+    
+    await writeOnTimeline(page,notice)
+  
+     await browser.close();
+}
+
+module.exports = loginAndPostTimeLine;
