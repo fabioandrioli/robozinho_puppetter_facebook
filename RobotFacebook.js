@@ -1,4 +1,6 @@
+require('dotenv').config()
 const puppeteer = require('puppeteer');
+
 
  const loginAndPostTimeLine = async () => {
     const browser = await puppeteer.launch({
@@ -17,8 +19,8 @@ const puppeteer = require('puppeteer');
 
     await page.waitForSelector("#email");
 
-    await page.type("#email","");
-    await page.type("#pass","");
+    await page.type("#email",process.env.FACEBOOK_EMAIL);
+    await page.type("#pass",process.env.FACEBOOK_PASSWORD);
 
     await page.click(`[type="submit"]`)
     
