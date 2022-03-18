@@ -1,11 +1,12 @@
-const getNoticeBBCnews = require("./RobotNotice")
-const loginAndPostTimeLine = require('./RobotFacebook');
-
-//loginAndPostTimeLine();
+const routineVerifyPost = require('./utils/routineVerifyPost')
 
 async function play(){
-    const reponse =  await getNoticeBBCnews;
-    await loginAndPostTimeLine(reponse.articles[0])   
+      
+    if(await !routineVerifyPost.verifyDateToNewPostInFacebook()){
+        setInterval(async () => await routineVerifyPost.verifyHourNewPost(),1000);
+    }else{
+        console.log("As datas são iguais")
+    }       
 }
 
 play();

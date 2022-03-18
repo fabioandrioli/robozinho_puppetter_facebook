@@ -130,3 +130,21 @@ const writeOnTimeline = async (page,notice) => {
 }
 
 module.exports = loginAndPostTimeLine;
+
+
+
+
+
+
+
+
+
+
+
+var future = "11:00:00"
+    setInterval(() => {
+        var date = moment().format('HH:mm:ss')
+        if(date == future)
+            console.log(date + " = " + future)
+        console.log(date)
+    },1000

@@ -4,8 +4,7 @@ const puppeteer = require('puppeteer');
 
 const writeOnTimeline = async (page,notice) => {
 
-    let sentenceList = `Se você estiver lendo este conteudo, saiba que sou um processo,
-     automatizado de conteudo, fui desenvolvido por Fábio Gilberto.` +
+    let sentenceList = 
         "\n\n" +
         notice.title + 
         "\n\n" + 
