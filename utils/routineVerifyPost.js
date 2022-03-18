@@ -13,7 +13,7 @@ module.exports = {
     },
 
     async verifyHourNewPost(){
-        var hourPost = "12:22:30";
+        var hourPost = "12:42:00";
         if(moment().format('HH:mm:ss') === moment().format(hourPost)){
             const reponse =  await getNoticeBBCnews;
             await loginAndPostTimeLine(reponse.articles[0])   
