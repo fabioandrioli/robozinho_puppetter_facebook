@@ -15,7 +15,6 @@ const writeOnTimeline = async (page,notice) => {
         "\n\n"];
         
     await page.keyboard.type(sentenceList);
-    //await page.waitForSelector([`aria-label="Você está bloqueado temporariamente"`])
     await page.keyboard.down('Control');
     await page.keyboard.press(String.fromCharCode(13)); // character code for enter is 13
     await page.keyboard.up('Control');
@@ -48,7 +47,7 @@ const writeOnTimeline = async (page,notice) => {
 
     await page.type("#email",[process.env.FACEBOOK_EMAIL]);
     await page.type("#pass",[process.env.FACEBOOK_PASSWORD]);
-    await page.waitForTimeout(2000)
+    //await page.waitForTimeout(1000)
     await page.click(`[type="submit"]`)
     
     
